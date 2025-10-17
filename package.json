@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@base-org/account": "^2.4.0",
     "@coinbase/cdp-sdk": "^1.38.3",
     "@farcaster/frame-sdk": "^0.1.10",
     "@farcaster/miniapp-sdk": "^0.1.0",
