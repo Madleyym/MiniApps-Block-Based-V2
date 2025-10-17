@@ -1,0 +1,425 @@
+/* ============================================
+   GAME MENU STYLES
+   File: src/styles/game-menu.css
+   Last Updated: 2025-01-13 12:00:47 UTC
+   User: mipadfive18
+   
+   CHANGELOG:
+   - ✅ UPDATED: Border-radius to use CSS variables
+   - ✅ OPTIMIZED: Performance optimizations
+   - ✅ VERIFIED: Already very clean, minimal changes needed
+   
+   NOTE: This file was already well-maintained!
+   Trophy badge, logo animations, and buttons are all optimized.
+   ============================================ */
+
+/* ============================================
+   TROPHY BADGE - CLICKABLE
+   ============================================ */
+.game-menu-trophy {
+  position: absolute;
+  top: clamp(20px, 6vw, 24px);
+  right: clamp(20px, 6vw, 24px);
+  width: clamp(56px, 16vw, 64px);
+  height: clamp(56px, 16vw, 64px);
+  background: linear-gradient(135deg, #fbbf24, #fb923c, #f97316);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 8px 16px rgba(251, 191, 36, 0.5),
+    0 0 0 3px rgba(255, 255, 255, 0.8);
+  animation: pulse 2s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.game-menu-trophy:active {
+  transform: scale3d(0.95, 0.95, 1);
+}
+
+.game-menu-trophy-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: clamp(20px, 6vw, 24px);
+  height: clamp(20px, 6vw, 24px);
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.game-menu-trophy-badge-text {
+  color: white;
+  font-size: clamp(10px, 2.8vw, 12px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ============================================
+   LOGO CONTAINER
+   ============================================ */
+.game-menu-logo {
+  text-align: center;
+  margin-bottom: clamp(16px, 5vw, 24px);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.game-menu-star {
+  position: relative;
+  width: clamp(56px, 16vw, 64px);
+  height: clamp(56px, 16vw, 64px);
+  margin: 0 auto clamp(12px, 4vw, 16px);
+  background: linear-gradient(135deg, #fde047, #fbbf24, #f97316);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spin 8s linear infinite;
+  filter: drop-shadow(0 4px 8px rgba(251, 191, 36, 0.6));
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ============================================
+   TITLE LETTERS
+   ============================================ */
+.game-menu-title {
+  font-size: clamp(48px, 16vw, 72px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: clamp(6px, 2vw, 8px);
+  user-select: none;
+}
+
+.game-menu-title-letter {
+  display: inline-block;
+  animation: bounce 1.5s ease-in-out infinite;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.game-menu-title-letter:nth-child(1) {
+  animation-delay: 0s;
+  color: #fb923c;
+}
+
+.game-menu-title-letter:nth-child(2) {
+  animation-delay: 0.1s;
+  color: #67e8f9;
+}
+
+.game-menu-title-letter:nth-child(3) {
+  animation-delay: 0.2s;
+  color: #f87171;
+}
+
+.game-menu-title-letter:nth-child(4) {
+  animation-delay: 0.3s;
+  color: #fde047;
+}
+
+.game-menu-title-letter:nth-child(5) {
+  animation-delay: 0.4s;
+  color: #c084fc;
+}
+
+.game-menu-subtitle {
+  font-size: clamp(18px, 6vw, 24px);
+  font-weight: 700;
+  color: #67e8f9;
+  letter-spacing: 0.3em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: clamp(4px, 1.5vw, 6px);
+}
+
+.game-menu-tagline {
+  font-size: clamp(10px, 2.8vw, 12px);
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   DAILY VICTORIES CARD
+   UPDATED: Border-radius uses CSS variable
+   ============================================ */
+.game-menu-victories-card {
+  width: 100%;
+  max-width: min(380px, 90vw);
+  margin: 0 auto clamp(16px, 5vw, 24px);
+  animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.game-menu-victories-inner {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.12));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--container-radius);
+  padding: clamp(16px, 5vw, 20px);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.game-menu-victories-label {
+  font-size: clamp(11px, 3vw, 13px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: clamp(8px, 2.5vw, 10px);
+}
+
+.game-menu-victories-content {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 3vw, 12px);
+}
+
+.game-menu-victories-icon {
+  width: clamp(48px, 13vw, 56px);
+  height: clamp(48px, 13vw, 56px);
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  border-radius: clamp(10px, 3vw, 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 12px rgba(34, 211, 238, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.game-menu-victories-count {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(4px, 1.5vw, 6px);
+}
+
+.game-menu-victories-multiplier {
+  font-size: clamp(18px, 5.5vw, 24px);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.game-menu-victories-number {
+  font-size: clamp(36px, 11vw, 48px);
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* ============================================
+   GAME MODE BUTTONS
+   UPDATED: Border-radius uses CSS variable
+   ============================================ */
+.game-menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 3vw, 12px);
+  width: 100%;
+  max-width: min(380px, 90vw);
+  margin: 0 auto;
+  animation: bounceIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+}
+
+.game-menu-button {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(14px, 4vw, 16px) clamp(24px, 7vw, 32px);
+  border-radius: var(--container-radius);
+  font-size: clamp(16px, 4.5vw, 20px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2.5vw, 12px);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 2px solid transparent;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  color: white;
+}
+
+.game-menu-button:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transform: translate3d(0, -2px, 0);
+}
+
+.game-menu-button:active {
+  transform: scale3d(0.98, 0.98, 1);
+}
+
+.game-menu-button-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.game-menu-button:hover .game-menu-button-shine {
+  transform: translate3d(100%, 0, 0);
+}
+
+/* ============================================
+   BUTTON VARIANTS
+   ============================================ */
+.game-menu-button-adventure {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border-color: rgba(251, 146, 60, 0.5);
+}
+
+.game-menu-button-adventure:hover {
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+}
+
+.game-menu-button-classic {
+  background: linear-gradient(135deg, #06b6d4, #0d9488);
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+.game-menu-button-classic:hover {
+  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
+}
+
+.game-menu-button-more {
+  background: linear-gradient(135deg, #2dd4bf, #10b981);
+  border-color: rgba(45, 212, 191, 0.5);
+}
+
+.game-menu-button-more:hover {
+  box-shadow: 0 8px 20px rgba(45, 212, 191, 0.4);
+}
+
+.game-menu-button-new-badge {
+  position: absolute;
+  top: clamp(6px, 2vw, 8px);
+  right: clamp(6px, 2vw, 8px);
+  width: clamp(10px, 3vw, 12px);
+  height: clamp(10px, 3vw, 12px);
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.game-menu-footer {
+  text-align: center;
+  margin-top: clamp(12px, 4vw, 16px);
+  animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+}
+
+.game-menu-footer-text {
+  font-size: clamp(10px, 2.8vw, 12px);
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   FLOATING PARTICLES
+   ============================================ */
+.game-menu-particle {
+  position: absolute;
+  width: clamp(3px, 1vw, 4px);
+  height: clamp(3px, 1vw, 4px);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 5s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ============================================
+   ANIMATIONS
+   NOTE: spin and float animations are defined here
+   bounce animation uses global version from globals.css
+   ============================================ */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(10px, -20px, 0);
+    opacity: 0.6;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .game-menu-star,
+  .game-menu-title-letter,
+  .game-menu-particle,
+  .game-menu-trophy {
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 390px) {
+  .game-menu-title {
+    font-size: clamp(42px, 14vw, 56px);
+  }
+  
+  .game-menu-victories-card {
+    max-width: 92vw;
+  }
+  
+  .game-menu-buttons {
+    max-width: 92vw;
+  }
+}
+
+@media (min-width: 768px) {
+  .game-menu-logo {
+    margin-bottom: 32px;
+  }
+  
+  .game-menu-victories-card {
+    max-width: 400px;
+  }
+  
+  .game-menu-buttons {
+    max-width: 400px;
+  }
+}

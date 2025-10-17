@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2a5298;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7e22ce;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="1024" height="1024" fill="url(#heroBg)"/>
+  
+  <g opacity="0.12">
+    <circle cx="200" cy="200" r="100" fill="#8b5cf6"/>
+    <circle cx="824" cy="300" r="120" fill="#ec4899"/>
+    <circle cx="150" cy="700" r="80" fill="#3b82f6"/>
+    <circle cx="800" cy="800" r="150" fill="#f97316"/>
+  </g>
+  
+  <!-- Logo grid centered -->
+  <g transform="translate(262, 150)">
+    <rect x="0" y="0" width="110" height="110" rx="18" fill="#3b82f6" filter="url(#glow)"/>
+    <rect x="135" y="0" width="110" height="110" rx="18" fill="#8b5cf6" filter="url(#glow)"/>
+    <rect x="270" y="0" width="110" height="110" rx="18" fill="#ec4899" filter="url(#glow)"/>
+    <rect x="405" y="0" width="110" height="110" rx="18" fill="#f97316" filter="url(#glow)"/>
+    
+    <rect x="0" y="135" width="110" height="110" rx="18" fill="#ec4899" filter="url(#glow)"/>
+    <rect x="135" y="135" width="110" height="110" rx="18" fill="#3b82f6" filter="url(#glow)"/>
+    <rect x="270" y="135" width="110" height="110" rx="18" fill="#f97316" filter="url(#glow)"/>
+    <rect x="405" y="135" width="110" height="110" rx="18" fill="#8b5cf6" filter="url(#glow)"/>
+    
+    <rect x="0" y="270" width="110" height="110" rx="18" fill="#8b5cf6" filter="url(#glow)"/>
+    <rect x="135" y="270" width="110" height="110" rx="18" fill="#f97316" filter="url(#glow)"/>
+    <rect x="270" y="270" width="110" height="110" rx="18" fill="#3b82f6" filter="url(#glow)"/>
+    <rect x="405" y="270" width="110" height="110" rx="18" fill="#ec4899" filter="url(#glow)"/>
+    
+    <rect x="0" y="405" width="110" height="110" rx="18" fill="#f97316" filter="url(#glow)"/>
+    <rect x="135" y="405" width="110" height="110" rx="18" fill="#ec4899" filter="url(#glow)"/>
+    <rect x="270" y="405" width="110" height="110" rx="18" fill="#8b5cf6" filter="url(#glow)"/>
+    <rect x="405" y="405" width="110" height="110" rx="18" fill="#3b82f6" filter="url(#glow)"/>
+  </g>
+  
+  <!-- Text content -->
+  <text x="512" y="780" font-family="Arial, sans-serif" font-size="96" font-weight="900" fill="white" text-anchor="middle" letter-spacing="-2">
+    BLOCK BASED
+  </text>
+  <text x="512" y="850" font-family="Arial, sans-serif" font-size="42" font-weight="600" fill="#a5f3fc" text-anchor="middle">
+    Puzzle Game on Base
+  </text>
+</svg>

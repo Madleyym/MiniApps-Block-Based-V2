@@ -1,0 +1,33 @@
+name: Weekly Prize Pool Finalization
+
+on:
+  schedule:
+    # Setiap Senin jam 00:00 UTC (akhir minggu)
+    - cron: '0 0 * * 1'
+  
+  # Bisa trigger manual juga
+  workflow_dispatch:
+    inputs:
+      weekNumber:
+        description: 'Week number (kosongkan untuk auto)'
+        required: false
+        type: number
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Finalize Week
+        run: |
+          WEEK=""
+          if [ -n "${{ github.event.inputs.weekNumber }}" ]; then
+            WEEK='"weekNumber":${{ github.event.inputs.weekNumber }},'
+          fi
+          
+          curl -X POST ${{ secrets.APP_URL }}/api/finalize-week \
+            -H "Content-Type: application/json" \
+            -d "{\"secret\":\"${{ secrets.CRON_SECRET }}\",${WEEK}\"autoExecute\":true}"
+      
+      - name: Result
+        run: echo "✅ Finalization completed"

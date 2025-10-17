@@ -1,0 +1,410 @@
+/* ============================================
+   LEVEL UP OVERLAY STYLES
+   File: src/styles/level-up.css
+   Last Updated: 2025-01-13 11:57:23 UTC
+   User: mipadfive18
+   
+   CHANGELOG:
+   - ✅ UPDATED: Z-index to use CSS variable
+   - ✅ VERIFIED: Border-radius already correct (no changes needed)
+   - ✅ OPTIMIZED: Performance with CSS containment
+   ============================================ */
+
+/* ============================================
+   LEVEL UP OVERLAY
+   UPDATED: Z-index uses CSS variable
+   ============================================ */
+.level-up-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(30, 60, 114, 0.95));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: var(--z-level-up);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: levelUpFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  padding: clamp(16px, 5vw, 20px);
+  will-change: opacity;
+  contain: layout style paint;
+}
+
+.level-up-overlay.fade-out {
+  animation: levelUpFadeOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* ============================================
+   LEVEL UP CONTENT
+   BORDER-RADIUS: Already using --container-radius ✅
+   ============================================ */
+.level-up-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  animation: levelUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 100%;
+  max-width: min(360px, 90vw);
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+  border-radius: var(--container-radius);
+}
+
+.level-up-stars {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  display: flex;
+  gap: clamp(12px, 4vw, 16px);
+  z-index: 3;
+}
+
+.star {
+  font-size: clamp(24px, 7vw, 32px);
+  animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+  transform: scale3d(0, 0, 1) rotate(0deg);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.star-1 { animation-delay: 0.1s; }
+.star-2 { animation-delay: 0.15s; }
+.star-3 { animation-delay: 0.2s; }
+.star-4 { animation-delay: 0.25s; }
+.star-5 { animation-delay: 0.3s; }
+
+/* ============================================
+   LEVEL UP BADGE
+   BORDER-RADIUS: Already using --container-radius ✅
+   ============================================ */
+.level-up-badge {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  padding: clamp(24px, 8vw, 40px) clamp(32px, 10vw, 60px);
+  border-radius: var(--container-radius);
+  box-shadow: 
+    0 20px 60px rgba(251, 191, 36, 0.6),
+    0 0 100px rgba(251, 191, 36, 0.4),
+    inset 0 -10px 20px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  animation: badgePulse 2s ease-in-out infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform, box-shadow;
+  contain: layout style paint;
+}
+
+.level-up-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: badgeShine 3s linear infinite;
+  will-change: transform;
+  transform: translate3d(-100%, -100%, 0) rotate(45deg);
+}
+
+.level-up-icon {
+  font-size: clamp(48px, 15vw, 80px);
+  margin-bottom: clamp(6px, 2vw, 10px);
+  animation: iconRotate 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+  display: inline-block;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.level-up-title {
+  font-size: clamp(20px, 7vw, 32px);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: clamp(2px, 0.5vw, 4px);
+  text-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.5);
+  margin-bottom: clamp(6px, 2vw, 10px);
+  line-height: 1;
+  will-change: opacity;
+}
+
+.level-up-subtitle {
+  font-size: clamp(12px, 4vw, 16px);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+/* ============================================
+   LEVEL UP STATS
+   BORDER-RADIUS: Already using --container-radius ✅
+   ============================================ */
+.level-up-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(16px, 5vw, 30px);
+  margin-top: clamp(20px, 6vw, 40px);
+  background: rgba(255, 255, 255, 0.1);
+  padding: clamp(12px, 4vw, 20px) clamp(16px, 5vw, 40px);
+  border-radius: var(--container-radius);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1.5vw, 8px);
+  text-align: center;
+}
+
+.stat-label {
+  font-size: clamp(10px, 3vw, 12px);
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: clamp(0.5px, 0.2vw, 1px);
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: clamp(20px, 6vw, 28px);
+  font-weight: 900;
+  color: #fbbf24;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  line-height: 1;
+}
+
+.stat-divider {
+  width: 2px;
+  height: clamp(40px, 12vw, 50px);
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.3), transparent);
+  flex-shrink: 0;
+}
+
+.level-up-message {
+  margin-top: clamp(16px, 5vw, 30px);
+  font-size: clamp(12px, 4vw, 16px);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  animation: messageFloat 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ============================================
+   LEVEL UP FIREWORKS
+   ============================================ */
+.level-up-fireworks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.firework {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 20px #fbbf24;
+  animation: fireworkExplode 1.2s cubic-bezier(0.4, 0, 0.2, 1) 3;
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+}
+
+.firework::before,
+.firework::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: clamp(30px, 10vw, 40px);
+  background: linear-gradient(to bottom, #fbbf24, transparent);
+}
+
+.firework::before { transform: rotate(45deg) translate3d(0, 0, 0); }
+.firework::after { transform: rotate(-45deg) translate3d(0, 0, 0); }
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes levelUpFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes levelUpFadeOut {
+  to {
+    opacity: 0;
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes levelUpBounce {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 1) translate3d(0, 100px, 0);
+  }
+  50% {
+    transform: scale3d(1.05, 1.05, 1) translate3d(0, -20px, 0);
+  }
+  70% {
+    transform: scale3d(0.95, 0.95, 1) translate3d(0, 10px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes starPop {
+  0% {
+    opacity: 0;
+    transform: scale3d(0, 0, 1) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale3d(1.3, 1.3, 1) rotate(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) rotate(360deg);
+  }
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale3d(1, 1, 1);
+    box-shadow: 
+      0 20px 60px rgba(251, 191, 36, 0.6),
+      0 0 100px rgba(251, 191, 36, 0.4);
+  }
+  50% {
+    transform: scale3d(1.05, 1.05, 1);
+    box-shadow: 
+      0 25px 80px rgba(251, 191, 36, 0.8),
+      0 0 120px rgba(251, 191, 36, 0.6);
+  }
+}
+
+@keyframes badgeShine {
+  0% {
+    transform: translate3d(-100%, -100%, 0) rotate(45deg);
+  }
+  100% {
+    transform: translate3d(100%, 100%, 0) rotate(45deg);
+  }
+}
+
+@keyframes iconRotate {
+  0% {
+    transform: scale3d(0, 0, 1) rotate(-180deg);
+  }
+  50% {
+    transform: scale3d(1.2, 1.2, 1) rotate(20deg);
+  }
+  100% {
+    transform: scale3d(1, 1, 1) rotate(0deg);
+  }
+}
+
+@keyframes messageFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes fireworkExplode {
+  0% {
+    opacity: 1;
+    transform: scale3d(0, 0, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale3d(2, 2, 1);
+  }
+}
+
+/* ============================================
+   LANDSCAPE MODE
+   ============================================ */
+@media (orientation: landscape) and (max-height: 500px) {
+  .level-up-badge {
+    padding: 16px 32px;
+  }
+
+  .level-up-icon {
+    font-size: 40px;
+    margin-bottom: 4px;
+  }
+
+  .level-up-title {
+    font-size: 18px;
+  }
+
+  .level-up-stats {
+    margin-top: 16px;
+    padding: 10px 20px;
+  }
+
+  .level-up-message {
+    margin-top: 12px;
+    font-size: 12px;
+  }
+
+  .level-up-stars {
+    display: none;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .level-up-overlay,
+  .level-up-content,
+  .star,
+  .level-up-badge,
+  .level-up-icon,
+  .level-up-message,
+  .firework {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .level-up-badge::before {
+    animation: none;
+  }
+}
+
+/* ============================================
+   BODY SCROLL LOCK
+   ============================================ */
+body:has(.level-up-overlay) {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+}

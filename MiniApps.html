@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Based - Puzzle Game On Base Network</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        .menu-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            z-index: 10;
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .menu-screen.hidden {
+            display: none;
+        }
+
+        .medal-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+            border: 4px solid white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .medal-badge::before {
+            content: '⭐';
+            font-size: 40px;
+        }
+
+        .medal-badge::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #FF4444;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .logo-title {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: -3px;
+            margin: 0;
+            text-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-title .letter {
+            display: inline-block;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        .logo-title .letter:nth-child(1) { 
+            color: #FF6B35; 
+            animation-delay: 0s;
+        }
+        .logo-title .letter:nth-child(2) { 
+            color: #4ECDC4; 
+            animation-delay: 0.1s;
+        }
+        .logo-title .letter:nth-child(3) { 
+            color: #FF1744; 
+            animation-delay: 0.2s;
+        }
+        .logo-title .letter:nth-child(4) { 
+            color: #FFD700; 
+            animation-delay: 0.3s;
+        }
+        .logo-title .letter:nth-child(5) { 
+            color: #9C27B0; 
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .crown-decoration {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            margin: 0 auto 10px;
+            filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-subtitle {
+            font-size: 24px;
+            font-weight: 600;
+            color: #4ECDC4;
+            text-shadow: 0 2px 8px rgba(78, 205, 196, 0.5);
+            margin-top: 10px;
+            letter-spacing: 3px;
+        }
+
+        .daily-victories {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .victory-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #5856D6;
+            margin-bottom: 15px;
+        }
+
+        .victory-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .victory-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+
+        .victory-count {
+            font-size: 48px;
+            font-weight: 900;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .victory-count::before {
+            content: '×';
+            font-size: 32px;
+            color: #666;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .menu-btn {
+            padding: 20px 40px;
+            border: none;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-btn:hover::before {
+            left: 100%;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn-adventure {
+            background: linear-gradient(135deg, #FF9500, #FF6B35);
+            color: white;
+        }
+
+        .btn-classic {
+            background: linear-gradient(135deg, #00D9C0, #00B8A9);
+            color: white;
+        }
+
+        .btn-more {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            background: #FF4444;
+            border-radius: 50%;
+            border: 2px solid white;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .game-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .game-container.active {
+            display: flex;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .crown-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.5));
+        }
+
+        .score-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .score-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-icon:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-icon:active {
+            transform: translateY(-1px);
+        }
+
+        .stats-panel {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-board {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            padding: 25px;
+            border-radius: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .game-board::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 300% 300%;
+            border-radius: 30px;
+            z-index: -1;
+            animation: borderGlow 3s ease infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+            gap: 3px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            height: 45%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 8px 8px 0 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .cell:hover:not(.filled) {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .cell.filled {
+            animation: blockPlace 0.3s ease-out;
+        }
+
+        @keyframes blockPlace {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .cell.filled-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.filled-purple::before {
+            opacity: 1;
+        }
+
+        .cell.filled-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.filled-pink::before {
+            opacity: 1;
+        }
+
+        .cell.filled-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.filled-blue::before {
+            opacity: 1;
+        }
+
+        .cell.filled-orange {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            box-shadow: 0 4px 15px rgba(250, 112, 154, 0.5), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.filled-orange::before {
+            opacity: 1;
+        }
+
+        .cell.highlight {
+            background: rgba(255, 255, 255, 0.4) !important;
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cell.clearing {
+            animation: clearEffect 0.6s ease-out forwards;
+        }
+
+        @keyframes clearEffect {
+            0% { transform: scale(1); opacity: 1; }
+            30% { transform: scale(1.3); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .pieces-container {
+            display: flex;
+            gap: 50px;
+            margin-top: 20px;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .piece-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .piece {
+            display: grid;
+            gap: 3px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .piece:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .piece:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        .piece.dragging {
+            opacity: 0.5;
+        }
+
+        .piece.used {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .piece-cell {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .piece-cell.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .piece-cell.active::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            height: 40%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent);
+            border-radius: 6px 6px 0 0;
+        }
+
+        .combo-display {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        .combo-display.show {
+            animation: comboAnimation 1s ease-out;
+        }
+
+        @keyframes comboAnimation {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8) translateY(-50px); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            font-weight: 700;
+            font-size: 16px;
+            color: #764ba2;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        @media (max-width: 768px) {
+            .logo-title {
+                font-size: 60px;
+            }
+
+            .grid {
+                grid-template-columns: repeat(10, 35px);
+                grid-template-rows: repeat(10, 35px);
+            }
+            
+            .cell, .piece-cell {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .stat-value {
+                font-size: 32px;
+            }
+            
+            .score {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="menu-screen" id="menuScreen">
+        <div class="medal-badge"></div>
+        
+        <div class="logo-container">
+            <div class="crown-decoration"></div>
+            <h1 class="logo-title">
+                <span class="letter">B</span><span class="letter">L</span><span class="letter">O</span><span class="letter">C</span><span class="letter">K</span>
+            </h1>
+            <div class="logo-subtitle">BASED</div>
+        </div>
+
+        <div class="daily-victories">
+            <div class="victory-header">Consecutive Daily Victories</div>
+            <div class="victory-content">
+                <div class="victory-icon">🏆</div>
+                <div class="victory-count" id="victoryCount">0</div>
+            </div>
+        </div>
+
+        <div class="menu-buttons">
+            <button class="menu-btn btn-adventure" onclick="startGame('adventure')">
+                <span>📍</span>
+                <span>Adventure</span>
+            </button>
+            <button class="menu-btn btn-classic" onclick="startGame('classic')">
+                <span>∞</span>
+                <span>Classic</span>
+            </button>
+            <button class="menu-btn btn-more" onclick="showMoreGames()">
+                <span>🎮</span>
+                <span>More Games</span>
+                <span class="notification-dot"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="game-container" id="gameContainer">
+        <div class="header">
+            <div class="score-container">
+                <div class="crown-icon"></div>
+                <div class="score-info">
+                    <div class="score-label">Score</div>
+                    <div class="score" id="score">0</div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn-icon" id="btnBack" title="Back to Menu">🏠</button>
+                <button class="btn-icon" id="btnRestart" title="Restart">🔄</button>
+                <button class="btn-icon" id="btnSound" title="Sound">🔊</button>
+            </div>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat-box">
+                <div class="stat-label">Moves</div>
+                <div class="stat-value" id="moves">0</div>
+            </div>
+            <div class="stat-box" id="adventureTarget" style="display: none;">
+                <div class="stat-label">Target</div>
+                <div class="stat-value" id="targetScore">0</div>
+            </div>
+            <div class="stat-box" id="adventureLevel" style="display: none;">
+                <div class="stat-label">Level</div>
+                <div class="stat-value" id="levelNumber">1</div>
+            </div>
+            <div class="stat-box" id="classicBest">
+                <div class="stat-label">Best</div>
+                <div class="stat-value" id="bestScore">0</div>
+            </div>
+        </div>
+
+        <div class="game-board">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <div class="pieces-container" id="pieces"></div>
+    </div>
+
+    <div class="combo-display" id="comboDisplay"></div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const GRID_SIZE = 10;
+        let score = 0;
+        let moves = 0;
+        let bestScore = parseInt(localStorage.getItem('blockBasedBestScore')) || 0;
+        let dailyVictories = parseInt(localStorage.getItem('blockBasedDailyVictories')) || 0;
+        let gameGrid = [];
+        let currentPieces = [];
+        let combo = 0;
+        let soundEnabled = localStorage.getItem('blockBasedSound') !== 'false';
+        let audioContext = null;
+        let gameMode = 'classic';
+        let currentLevel = 1;
+        let levelTarget = 0;
+        const maxLevel = 100;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled || !audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            switch(type) {
+                case 'place':
+                    oscillator.frequency.value = 400;
+                    oscillator.type = 'sine';
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+                    
+                case 'clear':
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'square';
+                    gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                    
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    osc2.frequency.value = 1000;
+                    osc2.type = 'sine';
+                    gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    osc2.start(audioContext.currentTime + 0.05);
+                    osc2.stop(audioContext.currentTime + 0.35);
+                    break;
+                    
+                case 'combo':
+                    [600, 750, 900, 1050].forEach((freq, i) => {
+                        const osc = audioContext.createOscillator();
+                        const gain = audioContext.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioContext.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'triangle';
+                        gain.gain.setValueAtTime(0.3, audioContext.currentTime + i * 0.1);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.1 + 0.2);
+                        osc.start(audioContext.currentTime + i * 0.1);
+                        osc.stop(audioContext.currentTime + i * 0.1 + 0.2);
+                    });
+                    break;
+                    
+                case 'gameover':
+                    [500, 400, 300, 200].forEach((freq, i) => {
+                        const osc = audioContext.createOscillator();
+                        const gain = audioContext.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioContext.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sawtooth';
+                        gain.gain.setValueAtTime(0.2, audioContext.currentTime + i * 0.15);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.15 + 0.3);
+                        osc.start(audioContext.currentTime + i * 0.15);
+                        osc.stop(audioContext.currentTime + i * 0.15 + 0.3);
+                    });
+                    break;
+                    
+                case 'newpiece':
+                    oscillator.frequency.value = 600;
+                    oscillator.type = 'triangle';
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                    break;
+                    
+                case 'levelup':
+                    [800, 900, 1000, 1200].forEach((freq, i) => {
+                        const osc = audioContext.createOscillator();
+                        const gain = audioContext.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioContext.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.setValueAtTime(0.4, audioContext.currentTime + i * 0.12);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.12 + 0.3);
+                        osc.start(audioContext.currentTime + i * 0.12);
+                        osc.stop(audioContext.currentTime + i * 0.12 + 0.3);
+                    });
+                    break;
+            }
+        }
+
+        const pieceTemplates = [
+            [[1, 1, 1]], 
+            [[1], [1], [1]], 
+            [[1, 1], [1, 1]], 
+            [[1, 1], [1, 0]], 
+            [[0, 1], [1, 1]], 
+            [[1, 0], [1, 1]], 
+            [[1, 1, 1, 1]], 
+            [[1], [1], [1], [1]], 
+            [[1, 1, 1], [0, 1, 0]], 
+            [[1, 1, 0], [0, 1, 1]], 
+            [[0, 1, 1], [1, 1, 0]], 
+            [[1, 1, 1], [1, 0, 0]], 
+            [[1, 1, 1], [0, 0, 1]],
+            [[1]], 
+            [[1, 1]], 
+        ];
+
+        const colors = ['filled-purple', 'filled-pink', 'filled-blue', 'filled-orange'];
+
+        function startGame(mode) {
+            gameMode = mode;
+            document.getElementById('menuScreen').classList.add('hidden');
+            document.getElementById('gameContainer').classList.add('active');
+            
+            if (mode === 'adventure') {
+                document.getElementById('adventureTarget').style.display = 'block';
+                document.getElementById('adventureLevel').style.display = 'block';
+                document.getElementById('classicBest').style.display = 'none';
+                currentLevel = parseInt(localStorage.getItem('blockBasedCurrentLevel')) || 1;
+            } else {
+                document.getElementById('adventureTarget').style.display = 'none';
+                document.getElementById('adventureLevel').style.display = 'none';
+                document.getElementById('classicBest').style.display = 'block';
+            }
+            
+            initAudio();
+            initGame();
+        }
+
+        function backToMenu() {
+            document.getElementById('menuScreen').classList.remove('hidden');
+            document.getElementById('gameContainer').classList.remove('active');
+        }
+
+        function showMoreGames() {
+            showToast('🚧 More games coming soon!');
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function initGrid() {
+            const gridElement = document.getElementById('grid');
+            gridElement.innerHTML = '';
+            gameGrid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(null));
+            
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.row = Math.floor(i / GRID_SIZE);
+                cell.dataset.col = i % GRID_SIZE;
+                
+                cell.addEventListener('dragover', handleDragOver);
+                cell.addEventListener('drop', handleDrop);
+                cell.addEventListener('dragenter', handleDragEnter);
+                cell.addEventListener('dragleave', handleDragLeave);
+                
+                gridElement.appendChild(cell);
+            }
+        }
+
+        function updateCell(row, col, colorClass) {
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            if (cell) {
+                cell.className = `cell ${colorClass ? colorClass + ' filled' : ''}`;
+                gameGrid[row][col] = colorClass || null;
+            }
+        }
+
+        function setupAdventureLevel() {
+            levelTarget = currentLevel * 500;
+            document.getElementById('targetScore').textContent = levelTarget.toLocaleString();
+            document.getElementById('levelNumber').textContent = currentLevel;
+            
+            const fillPercentage = Math.min(0.15 + (currentLevel * 0.005), 0.4);
+            const cellsToFill = Math.floor(GRID_SIZE * GRID_SIZE * fillPercentage);
+            
+            for (let i = 0; i < cellsToFill; i++) {
+                let row, col;
+                do {
+                    row = Math.floor(Math.random() * GRID_SIZE);
+                    col = Math.floor(Math.random() * GRID_SIZE);
+                } while (gameGrid[row][col] !== null);
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                updateCell(row, col, color);
+            }
+            
+            showToast(`🏆 Level ${currentLevel} - Target: ${levelTarget.toLocaleString()}`);
+        }
+
+        function generatePieces() {
+            const piecesContainer = document.getElementById('pieces');
+            piecesContainer.innerHTML = '';
+            currentPieces = [];
+
+            for (let i = 0; i < 3; i++) {
+                const template = pieceTemplates[Math.floor(Math.random() * pieceTemplates.length)];
+                const wrapper = document.createElement('div');
+                wrapper.className = 'piece-wrapper';
+                
+                const pieceDiv = document.createElement('div');
+                pieceDiv.className = 'piece';
+                pieceDiv.draggable = true;
+                pieceDiv.dataset.index = i;
+                pieceDiv.style.gridTemplateColumns = `repeat(${template[0].length}, 38px)`;
+                pieceDiv.style.gridTemplateRows = `repeat(${template.length}, 38px)`;
+
+                template.forEach(row => {
+                    row.forEach(cell => {
+                        const cellDiv = document.createElement('div');
+                        cellDiv.className = `piece-cell ${cell ? 'active' : ''}`;
+                        pieceDiv.appendChild(cellDiv);
+                    });
+                });
+
+                pieceDiv.addEventListener('dragstart', handlePieceDragStart);
+                pieceDiv.addEventListener('dragend', handlePieceDragEnd);
+
+                wrapper.appendChild(pieceDiv);
+                piecesContainer.appendChild(wrapper);
+                currentPieces.push({ template, used: false });
+            }
+
+            playSound('newpiece');
+        }
+
+        let draggedPiece = null;
+
+        function handlePieceDragStart(e) {
+            draggedPiece = {
+                index: parseInt(e.target.dataset.index),
+                template: currentPieces[parseInt(e.target.dataset.index)].template
+            };
+            e.target.classList.add('dragging');
+        }
+
+        function handlePieceDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            if (!draggedPiece) return;
+            const row = parseInt(e.target.dataset.row);
+            const col = parseInt(e.target.dataset.col);
+            highlightPossiblePlacement(row, col, draggedPiece.template);
+        }
+
+        function handleDragLeave(e) {
+            clearHighlights();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (!draggedPiece) return;
+
+            const row = parseInt(e.target.dataset.row);
+            const col = parseInt(e.target.dataset.col);
+            
+            if (canPlacePiece(draggedPiece.template, row, col)) {
+                placePiece(draggedPiece.template, row, col, draggedPiece.index);
+            }
+            
+            clearHighlights();
+            draggedPiece = null;
+        }
+
+        function highlightPossiblePlacement(startRow, startCol, piece) {
+            clearHighlights();
+            
+            if (canPlacePiece(piece, startRow, startCol)) {
+                for (let r = 0; r < piece.length; r++) {
+                    for (let c = 0; c < piece[r].length; c++) {
+                        if (piece[r][c]) {
+                            const cell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol + c}"]`);
+                            if (cell) cell.classList.add('highlight');
+                        }
+                    }
+                }
+            }
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.cell.highlight').forEach(cell => {
+                cell.classList.remove('highlight');
+            });
+        }
+
+        function canPlacePiece(piece, startRow, startCol) {
+            for (let r = 0; r < piece.length; r++) {
+                for (let c = 0; c < piece[r].length; c++) {
+                    if (piece[r][c]) {
+                        const newRow = startRow + r;
+                        const newCol = startCol + c;
+                        if (newRow < 0 || newRow >= GRID_SIZE || newCol < 0 || newCol >= GRID_SIZE || gameGrid[newRow][newCol]) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        function placePiece(piece, startRow, startCol, pieceIndex) {
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            let cellsPlaced = 0;
+            
+            for (let r = 0; r < piece.length; r++) {
+                for (let c = 0; c < piece[r].length; c++) {
+                    if (piece[r][c]) {
+                        updateCell(startRow + r, startCol + c, color);
+                        cellsPlaced++;
+                    }
+                }
+            }
+            
+            currentPieces[pieceIndex].used = true;
+            document.querySelector(`.piece[data-index="${pieceIndex}"]`).classList.add('used');
+            
+            moves++;
+            score += cellsPlaced * 10;
+            
+            playSound('place');
+            
+            const linesCleared = checkAndClearLines();
+            
+            if (linesCleared > 0) {
+                combo++;
+                const comboBonus = linesCleared * 100 * combo;
+                score += comboBonus;
+                showCombo(combo, comboBonus);
+                playSound('combo');
+            } else {
+                combo = 0;
+            }
+            
+            updateDisplay();
+            
+            if (currentPieces.every(p => p.used)) {
+                setTimeout(() => {
+                    generatePieces();
+                    showToast('🎉 New pieces!');
+                }, 500);
+            }
+            
+            checkGameOver();
+        }
+
+        function checkAndClearLines() {
+            let cleared = 0;
+            const cellsToClear = [];
+
+            for (let r = 0; r < GRID_SIZE; r++) {
+                if (gameGrid[r].every(cell => cell !== null)) {
+                    for (let c = 0; c < GRID_SIZE; c++) {
+                        cellsToClear.push({row: r, col: c});
+                    }
+                    cleared++;
+                }
+            }
+
+            for (let c = 0; c < GRID_SIZE; c++) {
+                if (gameGrid.every(row => row[c] !== null)) {
+                    for (let r = 0; r < GRID_SIZE; r++) {
+                        if (!cellsToClear.find(cell => cell.row === r && cell.col === c)) {
+                            cellsToClear.push({row: r, col: c});
+                        }
+                    }
+                    cleared++;
+                }
+            }
+
+            if (cellsToClear.length > 0) {
+                cellsToClear.forEach(({row, col}) => {
+                    const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                    if (cell) cell.classList.add('clearing');
+                });
+
+                setTimeout(() => {
+                    cellsToClear.forEach(({row, col}) => {
+                        updateCell(row, col, null);
+                    });
+                    playSound('clear');
+                }, 300);
+            }
+
+            return cleared;
+        }
+
+        function showCombo(comboCount, bonus) {
+            const comboDisplay = document.getElementById('comboDisplay');
+            comboDisplay.textContent = `COMBO ×${comboCount} +${bonus}`;
+            comboDisplay.classList.add('show');
+            
+            setTimeout(() => {
+                comboDisplay.classList.remove('show');
+            }, 1000);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function checkGameOver() {
+            if (gameMode === 'adventure' && score >= levelTarget) {
+                setTimeout(() => {
+                    playSound('levelup');
+                    currentLevel++;
+                    localStorage.setItem('blockBasedCurrentLevel', currentLevel);
+                    
+                    if (currentLevel > maxLevel) {
+                        alert(`🎉 CONGRATULATIONS! You completed all ${maxLevel} levels!\nFinal Score: ${score.toLocaleString()}`);
+                        currentLevel = 1;
+                        localStorage.setItem('blockBasedCurrentLevel', 1);
+                        backToMenu();
+                    } else {
+                        showToast(`🎉 Level ${currentLevel - 1} Complete!`);
+                        setTimeout(() => {
+                            alert(`Level ${currentLevel - 1} Complete!\nScore: ${score.toLocaleString()}\n\nStarting Level ${currentLevel}...`);
+                            initGame();
+                        }, 1000);
+                    }
+                    return;
+                }, 500);
+                return;
+            }
+            
+            const hasValidMove = currentPieces.some((pieceData, index) => {
+                if (pieceData.used) return false;
+                
+                for (let r = 0; r < GRID_SIZE; r++) {
+                    for (let c = 0; c < GRID_SIZE; c++) {
+                        if (canPlacePiece(pieceData.template, r, c)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+
+            if (!hasValidMove) {
+                setTimeout(() => {
+                    playSound('gameover');
+                    
+                    if (gameMode === 'classic') {
+                        if (score > bestScore) {
+                            bestScore = score;
+                            localStorage.setItem('blockBasedBestScore', bestScore);
+                            showToast('🎉 NEW HIGH SCORE!');
+                            
+                            dailyVictories++;
+                            localStorage.setItem('blockBasedDailyVictories', dailyVictories);
+                            document.getElementById('victoryCount').textContent = dailyVictories;
+                        }
+                        
+                        setTimeout(() => {
+                            alert(`Game Over!\nFinal Score: ${score.toLocaleString()}\nBest Score: ${bestScore.toLocaleString()}`);
+                            backToMenu();
+                        }, 1000);
+                    } else {
+                        setTimeout(() => {
+                            alert(`Level Failed!\nScore: ${score.toLocaleString()}\nTarget: ${levelTarget.toLocaleString()}\n\nTry again?`);
+                            initGame();
+                        }, 1000);
+                    }
+                }, 500);
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('score').textContent = score.toLocaleString();
+            document.getElementById('moves').textContent = moves;
+            document.getElementById('bestScore').textContent = bestScore.toLocaleString();
+        }
+
+        function initGame() {
+            score = 0;
+            moves = 0;
+            combo = 0;
+            initGrid();
+            
+            if (gameMode === 'adventure') {
+                setupAdventureLevel();
+            }
+            
+            generatePieces();
+            updateDisplay();
+        }
+
+        function restartGame() {
+            initGame();
+            showToast('🔄 Game restarted!');
+        }
+
+        document.getElementById('btnBack').addEventListener('click', backToMenu);
+        document.getElementById('btnRestart').addEventListener('click', restartGame);
+        document.getElementById('btnSound').addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            localStorage.setItem('blockBasedSound', soundEnabled);
+            document.getElementById('btnSound').textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) {
+                initAudio();
+                showToast('🔊 Sound enabled');
+            } else {
+                showToast('🔇 Sound disabled');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            document.getElementById('bestScore').textContent = bestScore.toLocaleString();
+            document.getElementById('victoryCount').textContent = dailyVictories;
+            document.getElementById('btnSound').textContent = soundEnabled ? '🔊' : '🔇';
+        });
+
+        document.addEventListener('click', () => {
+            if (!audioContext && soundEnabled) {
+                initAudio();
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7e22ce;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconBlock1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconBlock2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconBlock3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#db2777;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconBlock4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ea580c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="256" height="256" rx="50" fill="url(#iconBg)"/>
+  
+  <!-- 4x4 Grid representation -->
+  <g transform="translate(48, 48)">
+    <!-- Row 1 -->
+    <rect x="0" y="0" width="36" height="36" rx="8" fill="url(#iconBlock1)"/>
+    <rect x="44" y="0" width="36" height="36" rx="8" fill="url(#iconBlock2)"/>
+    <rect x="88" y="0" width="36" height="36" rx="8" fill="url(#iconBlock3)"/>
+    <rect x="132" y="0" width="36" height="36" rx="8" fill="url(#iconBlock4)"/>
+    
+    <!-- Row 2 -->
+    <rect x="0" y="44" width="36" height="36" rx="8" fill="url(#iconBlock3)"/>
+    <rect x="44" y="44" width="36" height="36" rx="8" fill="url(#iconBlock1)"/>
+    <rect x="88" y="44" width="36" height="36" rx="8" fill="url(#iconBlock4)"/>
+    <rect x="132" y="44" width="36" height="36" rx="8" fill="url(#iconBlock2)"/>
+    
+    <!-- Row 3 -->
+    <rect x="0" y="88" width="36" height="36" rx="8" fill="url(#iconBlock2)"/>
+    <rect x="44" y="88" width="36" height="36" rx="8" fill="url(#iconBlock4)"/>
+    <rect x="88" y="88" width="36" height="36" rx="8" fill="url(#iconBlock1)"/>
+    <rect x="132" y="88" width="36" height="36" rx="8" fill="url(#iconBlock3)"/>
+    
+    <!-- Row 4 -->
+    <rect x="0" y="132" width="36" height="36" rx="8" fill="url(#iconBlock4)"/>
+    <rect x="44" y="132" width="36" height="36" rx="8" fill="url(#iconBlock3)"/>
+    <rect x="88" y="132" width="36" height="36" rx="8" fill="url(#iconBlock2)"/>
+    <rect x="132" y="132" width="36" height="36" rx="8" fill="url(#iconBlock1)"/>
+  </g>
+  
+  <!-- Glow effect -->
+  <rect width="256" height="256" rx="50" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+</svg>
